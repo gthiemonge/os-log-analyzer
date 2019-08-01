@@ -1,0 +1,28 @@
+vars:
+    octavia: &octavia
+        error_log_regexps:
+            - 'status has changed.*ERROR'
+            - '\[ALERT\]'
+
+sources:
+    downstream:
+        type: DownstreamLogAnalyzer
+        cache_dir: ~/.cache/os-log-analyzer
+        <<: *octavia
+        log_files:
+            - octavia/octavia.log
+            - octavia/health-manager.log
+            - octavia/housekeeping.log
+            - octavia/worker.log
+
+    upstream:
+        type: OpendevReviewLogAnalyzer
+        include_non_voting_jobs: False
+        <<: *octavia
+        log_files:
+            - screen-o-cw.txt.gz
+            - octavia-amphora_log.txt.gz
+            - screen-o-api.txt.gz
+            - screen-o-hk.txt.gz
+            - screen-o-hm.txt.gz
+            - tempest_log.txt.gz
